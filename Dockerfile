@@ -1,11 +1,10 @@
-#基于node
-
 FROM node:latest
-
-COPY server .
+RUN npm config set registry https://registry.npm.taobao.org/
+WORKDIR /app
+COPY server /app
 
 RUN npm i
 RUN npm install -g pm2
 EXPOSE 3000
 
-CMD pm2 start server/index.js
+CMD pm2 start /app/index.js
