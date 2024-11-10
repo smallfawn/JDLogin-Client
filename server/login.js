@@ -79,7 +79,7 @@ module.exports = async function login_pwd(object) {
         });
         const cookies = `${pt_keyValue}; ${pt_pinValue};`;
         await ql(cookies)
-        return { s: 'risk', data: cookies }
+        return { s: 'success', data: cookies }
     } else if (res.data.err_code == 128) {
         object.status = 'risk'
         return { s: 'risk', data: res.data.succcb }
