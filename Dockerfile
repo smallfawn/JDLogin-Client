@@ -4,7 +4,7 @@ FROM node:latest
 
 COPY server .
 
-RUN cd server && npm i
+RUN npm i
 RUN npm install -g pm2
 EXPOSE 3000
 
