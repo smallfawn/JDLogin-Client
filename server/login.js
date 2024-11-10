@@ -35,8 +35,8 @@ module.exports = async function login_pwd(object) {
             "_stk": "s_token,seg_enc,verifytoken",
             "username": object.phone,
             "pwd": object.pwd,
-            "risk_jd[eid]": config.jseid,
-            "risk_jd[fp]": config.jsfp,
+            "risk_jd[eid]": object.jseid,
+            "risk_jd[fp]": object.jsfp,
             "risk_jd[sdkToken]": "",
             "risk_jd[token]": object.jstoken,
             "risk_jd[jstub]": object.jstub
