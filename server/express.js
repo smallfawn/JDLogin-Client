@@ -4,7 +4,8 @@ const port = 3000
 const axios = require('axios')
 const config = require('./config.json')
 const ql = require('./ql.js')
-app.get('/', async (req, res) => {
+app.use(express.static('template'));
+/*app.get('/', async (req, res) => {
     let { data: result } = await axios.get(config.server + '/auth?key=' + config.key)
     if (result.status === 'success') {
         res.sendFile(__dirname + '/template/');
@@ -13,7 +14,7 @@ app.get('/', async (req, res) => {
     ]
 
 
-});
+});*/
 app.get('/api/set', async (req, res) => {
     const { username, password } = req.query
     let { data: result } = await axios.get(config.server + '/set?key=' + config.key + '&username=' + username + '&password=' + password)
