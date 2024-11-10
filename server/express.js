@@ -3,7 +3,8 @@ const app = express()
 const port = 3000
 const axios = require('axios')
 const config = require('./config.json')
-const ql = require('./ql.js')
+
+const login = require('./login.js')
 app.use(express.static('template'));
 /*app.get('/', async (req, res) => {
     let { data: result } = await axios.get(config.server + '/auth?key=' + config.key)
@@ -24,10 +25,17 @@ app.get('/api/set', async (req, res) => {
 app.get('/api/get', async (req, res) => {
     const { username } = req.query
     let { data: result } = await axios.get(config.server + '/get?key=' + config.key + '&username=' + username)
-    if (result.status === 'end') {
-        await ql(result.cookie)
+    if (result.status === 'success') {
+        let { s, data } = await login(result.data)
+        if (s == 'success') {
+            res.send({ status: 'success', msg: '登录成功', data: data })
+        } else if (s == 'risk') {
+            res.send({ status: 'risk', msg: '登录风控', data: data })
+        }
+    } else {
+        res.send({ status: 'wait', msg: '正在登录中', data: username })
     }
-    res.send(result)
+
 })
 app.get('/api/auth', async (req, res) => {
     const { key } = req.query
