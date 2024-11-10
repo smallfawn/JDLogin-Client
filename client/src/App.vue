@@ -9,13 +9,16 @@
       </el-form-item>
       <el-button type="primary" native-type="submit">登录</el-button>
     </el-form>
+    <div>
+      {{ }}
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
-
+let httpRes = ref('');
 import { ElMessageBox } from 'element-plus';
 let username = ref('');
 let password = ref('');
@@ -44,14 +47,16 @@ async function getApi() {
   let { data: res } = await axios.get(
     './api/get' + '?username=' + username.value,
   );
+  httpRes.value = JSON.stringify(res);
   if (res.status == 'risk') {
+    isLooping = false;
     ElMessageBox.confirm('账号存在风险，请进入链接进行验证,验证通过后再次提交即可', '警告')
       .then(() => {
-        window.open(res.url);
+        window.open(res.data);
       });
     return;
   }
-  if (res.status == 'end') {
+  if (res.status == 'success') {
     ElMessageBox.alert('账号登录成功', '提示');
     isLooping = false;
     return;
