@@ -258,7 +258,8 @@ class QingLong {
 }
 
 
-module.exports = async function main(updateCookie) {
+module.exports = { update, QingLong }
+async function update(updateCookie) {
     const config = require('./config.json');
     let ql = new QingLong(config.qlhost, config.qlappid, config.qlsecret);
     await ql.getAuthToken()

@@ -1,6 +1,7 @@
 
 const axios = require('axios');
-const ql = require('./ql.js')
+const { update } = require('./ql.js')
+const fs = require('fs')
 async function request(options) {
 
     let result = await axios.request(options);
@@ -78,7 +79,26 @@ module.exports = async function login_pwd(object) {
             }
         });
         const cookies = `${pt_keyValue}; ${pt_pinValue};`;
-        await ql(cookies)
+        await update(cookies)
+        //保存到user.json
+        let user = {
+            username: object.username,
+            password: object.password,
+            pt_pin: cookies.match(/pt_pin=(.*?);/)[1]
+        }
+
+        const users = fs.readFileSync('user.json', 'utf8')
+        let users_json = JSON.parse(users)
+        // 检查是否存在相同用户名的用户，若存在则更新
+        const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
+        if (existingUserIndex !== -1) {
+            users_json[existingUserIndex] = user;
+        } else {
+            users_json.push(user);
+        }
+        
+        // 将更新后的用户数据写回文件
+        fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
         return { s: 'success', data: cookies }
     } else if (res.data.err_code == 128) {
         object.status = 'risk'
