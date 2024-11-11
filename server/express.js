@@ -38,7 +38,9 @@ app.get('/api/get', async (req, res) => {
     }
     let { data: result } = await axios.get(config.server + '/get?key=' + config.key + '&username=' + username)
     if (result.status === 'success') {
-        let { s, data } = await login(result.data)
+        let object = result.data
+
+        let { s, data } = await login(object)
         if (s == 'success') {
             res.send({ status: 'success', msg: '登录成功', data: '' })
             return
