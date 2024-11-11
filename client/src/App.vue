@@ -29,10 +29,12 @@ function wait(ms) {
 // 添加一个标志来控制循环
 let isLooping = true;
 async function setApi() {
+  
   if (!username.value || !password.value) {
     ElMessageBox.alert('账号或密码为空', '提示');
     return;
   }
+  isLooping = true;
   let { data: res } = await axios.get(
     './api/set' + '?username=' + username.value + '&password=' + password.value,
   );
