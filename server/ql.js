@@ -298,4 +298,3 @@ async function update(updateCookie) {
     }
 
 }
-update("pt_key=AAJnMZL2ADAOJk-N2FTmwPVYrDYXpld1xbZ7tnMdbxZLpxAa9elxvaEfX7UTNvHLrE8BsWOcrrg; pt_pin=jd_mafMUHERycFm;")
