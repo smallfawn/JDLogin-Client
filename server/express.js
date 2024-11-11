@@ -57,6 +57,10 @@ app.get('/api/get', async (req, res) => {
 })
 app.get('/api/auth', async (req, res) => {
     const { key } = req.query
+    if (!key) {
+        res.send({ status: 'error', msg: '参数错误' })
+        return
+    }
     let { data: result } = await axios.get(config.server + '/auth?key=' + key)
     res.send(result)
 })
