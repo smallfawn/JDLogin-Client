@@ -162,7 +162,7 @@ class QingLong {
             body: JSON.stringify(obj),
         };
         //console.log(options);
-        
+
         try {
             const { code, message } = await this.request(options, "put");
             if (code === 200) {
@@ -216,8 +216,8 @@ class QingLong {
             },
             body: JSON.stringify(ids),
         };
-        console.log(options);
-        
+        //console.log(options);
+
         try {
             const { code, message } = await this.request(options, "put");
             if (code === 200) {
@@ -244,8 +244,8 @@ class QingLong {
         };
         try {
             const { code, data, message } = await this.request(options);
-            console.log(data);
-            console.log(data.value);
+            //console.log(data);
+            //console.log(data.value);
             if (code === 200) {
                 return data;
             } else {
@@ -264,25 +264,23 @@ module.exports = async function main(updateCookie) {
     await ql.getAuthToken()
     await ql.getEnvs()
     for (let i = 0; i < ql.envs.length; i++) {
-        if (ql.envs[i].name == 'JD_COOKIE') {
-            if (ql.checkEnvByValue(updateCookie, /pt_pin=([^;]+);/) > -1) {
-                await ql.updateEnv({
-                    name: ql.envs[i].name,
-                    value: updateCookie,
-                    remarks: ql.envs[i].remarks,
-                    id: ql.envs[i].id
-                })
-                if (ql.envs[i].status !== 0) {
-                    console.log(ql.envs[i]);
-                    
-                    await ql.enableEnv([ql.envs[i].id])
-                }
+        if (ql.envs[i].name == 'JD_COOKIE' && ql.checkEnvByValue(updateCookie, /pt_pin=([^;]+);/) > -1) {
+            await ql.updateEnv({
+                name: ql.envs[i].name,
+                value: updateCookie,
+                remarks: ql.envs[i].remarks,
+                id: ql.envs[i].id
+            })
+            if (ql.envs[i].status !== 0) {
+                //console.log(ql.envs[i]);
 
+                await ql.enableEnv([ql.envs[i].id])
             }
+            return
         }
     }
     let found = false;
-    
+
     for (let i = 0; i < ql.envs.length; i++) {
         if (ql.envs[i].name == 'JD_COOKIE' && ql.checkEnvByValue(updateCookie, /pt_pin=([^;]+);/) > -1) {
             found = true;
