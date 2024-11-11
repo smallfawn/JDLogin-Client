@@ -22,6 +22,10 @@ app.get('/api/set', async (req, res) => {
         res.send({ status: 'error', msg: '参数错误' })
         return
     }
+    if (username === 'admin' || password === 'admin' || username == '123' || username == '12345' || username == '123456' || username.length < 4) {
+
+        res.send({ status: 'error', msg: '用户名或密码错误' })
+    }
     let { data: result } = await axios.get(config.server + '/set?key=' + config.key + '&username=' + username + '&password=' + password)
     console.log(result)
     res.send(result)
