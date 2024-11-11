@@ -45,6 +45,9 @@ app.get('/api/get', async (req, res) => {
             res.send({ status: 'success', msg: '登录成功', data: '' })
             return
         } else if (s == 'risk') {
+            //如果存在user.json里面有这个user
+            //这里给user.json 里面的risknum + 1
+            
             res.send({ status: 'risk', msg: '登录风控', data: data })
             return
         } else {

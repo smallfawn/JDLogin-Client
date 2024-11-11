@@ -53,11 +53,14 @@ async function getJDCookies(username, password) {
                 let { s, data } = await login(result.data)
                 if (s == 'success') {
                     //res.send({ status: 'success', msg: '登录成功', data: '' })
+                    console.log(`更新${username}的cookie成功`)
                     return
                 } else if (s == 'risk') {
+                    console.log(`更新${username}的cookie失败，风控`)
                     //res.send({ status: 'risk', msg: '登录风控', data: data })
                     return
                 } else if (s == 'error' || s == 'fail') {
+                    console.log(`更新${username}的cookie失败`)
                     //res.send({ status: s, msg: '登录失败', data: data })
                     return
                 }
