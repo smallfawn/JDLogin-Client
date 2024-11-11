@@ -53,7 +53,6 @@ async function getApi() {
   );
   httpRes.value = JSON.stringify(res.msg);
   if (res.status == 'risk') {
-    
     isLooping = false;
     ElMessageBox.confirm('账号存在风险，请进入链接进行验证,验证通过后再次提交即可', '警告')
       .then(() => {
@@ -67,7 +66,7 @@ async function getApi() {
     return;
   }
   if (res.status == 'error') {
-    ElMessageBox.alert('账号登录失败', '提示');
+    ElMessageBox.alert('账号登录失败 ' + res.data, '提示');
     isLooping = false;
     return;
   }
