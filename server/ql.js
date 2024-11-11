@@ -258,7 +258,7 @@ class QingLong {
 }
 
 
-async function main(updateCookie) {
+module.exports = async function main(updateCookie) {
     const config = require('./config.json');
     let ql = new QingLong(config.qlhost, config.qlappid, config.qlsecret);
     await ql.getAuthToken()
@@ -295,4 +295,3 @@ async function main(updateCookie) {
     }
 
 }
-main('pt_key=AAJnMI9WADCQAKWazf2GG_xtndAlFGn6at3GQjdrrIzE9eB97ut0Cq4YUKs3XYHfQV45G4UrEZ8; pt_pin=jd_mafMUHESRycFm;')
