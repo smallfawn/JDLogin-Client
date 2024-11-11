@@ -18,12 +18,20 @@ app.use(express.static('template'));
 });*/
 app.get('/api/set', async (req, res) => {
     const { username, password } = req.query
+    if (username && password) {
+        res.send({ status: 'error', msg: '参数错误' })
+        return
+    }
     let { data: result } = await axios.get(config.server + '/set?key=' + config.key + '&username=' + username + '&password=' + password)
     console.log(result)
     res.send(result)
 })
 app.get('/api/get', async (req, res) => {
     const { username } = req.query
+    if (!username) {
+        res.send({ status: 'error', msg: '参数错误' })
+        return
+    }
     let { data: result } = await axios.get(config.server + '/get?key=' + config.key + '&username=' + username)
     if (result.status === 'success') {
         let { s, data } = await login(result.data)
