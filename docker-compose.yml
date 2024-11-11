@@ -1,0 +1,7 @@
+services:
+  jdjdjd:
+    image: registry.cn-hangzhou.aliyuncs.com/smallfawn/jdjdjd
+    ports:
+      - "你的端口:3000"
+    volumes:
+      - ./config.json:/app/config.json

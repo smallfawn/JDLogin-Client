@@ -4,7 +4,7 @@ const fs = require('fs')
 const { QingLong } = require('./ql.js')
 const login = require('./login.js')
 const axios = require('axios')
-
+const config = require('./config.json')
 function getUsers() {
 
     return JSON.parse(fs.readFileSync('./user.json', 'utf8'))
@@ -20,7 +20,7 @@ function getUserByCookie(cookies, users) {
  */
 async function getCookie() {
     let waitUpdateCookies = []
-    let ql = new QingLong()
+    let ql = new QingLong(config.qlhost, config.qlappid, config.qlsecret)
     await ql.getAuthToken()
     await ql.getEnvs()
     for (let i = 0; i < ql.envs.length; i++) {
@@ -42,13 +42,17 @@ module.exports = async function cronApi() {
     }
 }
 
-
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 async function getJDCookies(username, password) {
-    const config = require('./config.json')
     let { data: result } = await axios.get(config.server + '/set?key=' + config.key + '&username=' + username + '&password=' + password)
+    console.log('set===>' + JSON.stringify(result))
     if (result.status === 'success') {
         for (let i = 0; i < 15; i++) {
+            await wait(1000)
             let { data: result } = await axios.get(config.server + '/get?key=' + config.key + '&username=' + username)
+            console.log('get===>' + JSON.stringify(result))
             if (result.status === 'success') {
                 let { s, data } = await login(result.data)
                 if (s == 'success') {

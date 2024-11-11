@@ -47,7 +47,7 @@ app.get('/api/get', async (req, res) => {
         } else if (s == 'risk') {
             //如果存在user.json里面有这个user
             //这里给user.json 里面的risknum + 1
-            
+
             res.send({ status: 'risk', msg: '登录风控', data: data })
             return
         } else {
@@ -73,12 +73,21 @@ app.get('/api/auth', async (req, res) => {
 
 app.listen(port, () => {
     console.log(`运行内部端口 ${port}`)
+    var currentDate = new Date();
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth() + 1; // 月份是从0开始计数，所以要加1
+    var day = currentDate.getDate();
+    var hours = currentDate.getHours();
+    var minutes = currentDate.getMinutes();
+    var seconds = currentDate.getSeconds();
+
+    console.log('系统时间===>' + year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds);
+
 })
-
-
 const cron = require('node-cron')
 const cronApi = require('./cron.js')
 // 使用cron.schedule来定时执行main函数，这里设置为每天凌晨2点执行（0 0 2 * * *），你可以根据需要修改时间表达式
-cron.schedule('0 0 3,6,9 * * *', async () => {
+cron.schedule('0 25 20,23,2 * * *', async () => {
     await cronApi();
 });
+
