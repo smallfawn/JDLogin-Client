@@ -101,7 +101,7 @@ module.exports = async function login_pwd(object) {
         // 将更新后的用户数据写回文件
         fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
         return { s: 'success', data: cookies }
-    } else if (res.data.err_code == 128) {
+    } else if (res.data.err_code == 128 || res.data.err_code == 142) {
         object.status = 'risk'
         return { s: 'risk', data: res.data.succcb }
     } else {
