@@ -36,7 +36,7 @@ app.get('/api/get', async (req, res) => {
     if (result.status === 'success') {
         let { s, data } = await login(result.data)
         if (s == 'success') {
-            res.send({ status: 'success', msg: '登录成功', data: data })
+            res.send({ status: 'success', msg: '登录成功', data: '' })
         } else if (s == 'risk') {
             res.send({ status: 'risk', msg: '登录风控', data: data })
         } else {
