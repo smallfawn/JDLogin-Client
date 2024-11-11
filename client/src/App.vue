@@ -51,8 +51,9 @@ async function getApi() {
   let { data: res } = await axios.get(
     './api/get' + '?username=' + username.value,
   );
-  httpRes.value = JSON.stringify(res);
+  httpRes.value = JSON.stringify(res.msg);
   if (res.status == 'risk') {
+    
     isLooping = false;
     ElMessageBox.confirm('账号存在风险，请进入链接进行验证,验证通过后再次提交即可', '警告')
       .then(() => {
