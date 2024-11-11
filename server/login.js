@@ -86,6 +86,7 @@ module.exports = async function login_pwd(object) {
     } else {
         return { s: 'error', data: res.data.err_msg }
     }
+    //6账密不对
 
 
 

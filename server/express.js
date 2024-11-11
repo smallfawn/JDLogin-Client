@@ -31,6 +31,8 @@ app.get('/api/get', async (req, res) => {
             res.send({ status: 'success', msg: '登录成功', data: data })
         } else if (s == 'risk') {
             res.send({ status: 'risk', msg: '登录风控', data: data })
+        } else {
+            res.send({ status: s, msg: '登录失败', data: data })
         }
     } else {
         res.send({ status: 'wait', msg: '正在登录中', data: username })

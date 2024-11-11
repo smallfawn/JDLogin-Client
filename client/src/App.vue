@@ -61,6 +61,11 @@ async function getApi() {
     isLooping = false;
     return;
   }
+  if (res.status == 'error') {
+    ElMessageBox.alert('账号登录失败', '提示');
+    isLooping = false;
+    return;
+  }
 }
 </script>
 
