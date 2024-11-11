@@ -10,7 +10,7 @@
       <el-button type="primary" native-type="submit">登录</el-button>
     </el-form>
     <div>
-      {{ }}
+      {{ httpRes }}
     </div>
   </div>
 </template>
