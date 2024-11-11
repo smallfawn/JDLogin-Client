@@ -1,6 +1,6 @@
 {
-    "key": "HASL1",
-    "server": "http://8.141.174.247:3000",
+    "key": "KEY",
+    "server": "http://APIURL",
     "qlhost": "",
     "qlappid": "",
     "qlsecret": ""

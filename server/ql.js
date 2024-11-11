@@ -161,11 +161,13 @@ class QingLong {
             },
             body: JSON.stringify(obj),
         };
+        //console.log(options);
+        
         try {
-            const { code, message } = await this.request(options, "post");
+            const { code, message } = await this.request(options, "put");
             if (code === 200) {
                 console.log(`✅The environment variable was updated successfully.`);
-                await this.enableEnv([obj._id]);
+                //await this.enableEnv([obj._id]);
             } else {
                 throw message || "Failed to update the environment variable.";
             }
@@ -214,8 +216,10 @@ class QingLong {
             },
             body: JSON.stringify(ids),
         };
+        console.log(options);
+        
         try {
-            const { code, message } = await this.request(options, "post");
+            const { code, message } = await this.request(options, "put");
             if (code === 200) {
                 console.log(`✅The environment variable was enabled successfully.`);
             } else {
@@ -253,7 +257,8 @@ class QingLong {
     }
 }
 
-module.exports = async function main(updateCookie) {
+
+async function main(updateCookie) {
     const config = require('./config.json');
     let ql = new QingLong(config.qlhost, config.qlappid, config.qlsecret);
     await ql.getAuthToken()
@@ -261,28 +266,33 @@ module.exports = async function main(updateCookie) {
     for (let i = 0; i < ql.envs.length; i++) {
         if (ql.envs[i].name == 'JD_COOKIE') {
             if (ql.checkEnvByValue(updateCookie, /pt_pin=([^;]+);/) > -1) {
-                ql.updateEnv({
+                await ql.updateEnv({
                     name: ql.envs[i].name,
                     value: updateCookie,
                     remarks: ql.envs[i].remarks,
                     id: ql.envs[i].id
                 })
                 if (ql.envs[i].status !== 0) {
-                    ql.enableEnv([ql.envs[i].id])
+                    console.log(ql.envs[i]);
+                    
+                    await ql.enableEnv([ql.envs[i].id])
                 }
 
             }
         }
     }
     let found = false;
+    
     for (let i = 0; i < ql.envs.length; i++) {
-        if (ql.envs[i].name == 'JD_COOKIE' && ql.checkEnvByValue(ql.envs[i].value, /pt_pin=([^;]+);/) > -1) {
+        if (ql.envs[i].name == 'JD_COOKIE' && ql.checkEnvByValue(updateCookie, /pt_pin=([^;]+);/) > -1) {
             found = true;
             break;
         }
     }
+
     if (!found) {
         ql.addEnv([{ value: updateCookie, name: 'JD_COOKIE', remarks: '备注' }])
     }
 
 }
+main('pt_key=AAJnMI9WADCQAKWazf2GG_xtndAlFGn6at3GQjdrrIzE9eB97ut0Cq4YUKs3XYHfQV45G4UrEZ8; pt_pin=jd_mafMUHESRycFm;')
