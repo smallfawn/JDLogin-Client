@@ -82,6 +82,7 @@ module.exports = async function login_pwd(object) {
         await update(cookies)
         //保存到user.json
         let user = {
+            risknum: 0,
             username: object.username,
             password: object.password,
             pt_pin: cookies.match(/pt_pin=(.*?);/)[1]
@@ -96,7 +97,7 @@ module.exports = async function login_pwd(object) {
         } else {
             users_json.push(user);
         }
-        
+
         // 将更新后的用户数据写回文件
         fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
         return { s: 'success', data: cookies }

@@ -265,18 +265,21 @@ async function update(updateCookie) {
     await ql.getAuthToken()
     await ql.getEnvs()
     for (let i = 0; i < ql.envs.length; i++) {
-        if (ql.envs[i].name == 'JD_COOKIE' && ql.checkEnvByValue(updateCookie, /pt_pin=([^;]+);/) > -1) {
-            await ql.updateEnv({
-                name: ql.envs[i].name,
-                value: updateCookie,
-                remarks: ql.envs[i].remarks,
-                id: ql.envs[i].id
-            })
-            if (ql.envs[i].status !== 0) {
-                //console.log(ql.envs[i]);
+        if (ql.envs[i].name == 'JD_COOKIE' && ql.envs[i].value.match(/pt_pin=([^;]+);/)) {
+            if (ql.envs[i].value.match(/pt_pin=([^;]+);/)[1] == updateCookie.match(/pt_pin=([^;]+);/)[1]) {
+                await ql.updateEnv({
+                    name: ql.envs[i].name,
+                    value: updateCookie,
+                    remarks: ql.envs[i].remarks,
+                    id: ql.envs[i].id
+                })
+                if (ql.envs[i].status !== 0) {
+                    //console.log(ql.envs[i]);
 
-                await ql.enableEnv([ql.envs[i].id])
+                    await ql.enableEnv([ql.envs[i].id])
+                }
             }
+
             return
         }
     }
