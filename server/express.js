@@ -69,3 +69,11 @@ app.get('/api/auth', async (req, res) => {
 app.listen(port, () => {
     console.log(`运行内部端口 ${port}`)
 })
+
+
+const cron = require('node-cron')
+const cronApi = require('./cron.js')
+// 使用cron.schedule来定时执行main函数，这里设置为每天凌晨2点执行（0 0 2 * * *），你可以根据需要修改时间表达式
+cron.schedule('0 0 3,6,9 * * *', async () => {
+    await cronApi();
+});

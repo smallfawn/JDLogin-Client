@@ -4,7 +4,7 @@ const fs = require('fs')
 const { QingLong } = require('./ql.js')
 const login = require('./login.js')
 const axios = require('axios')
-const cron = require('node-cron')
+
 function getUsers() {
 
     return JSON.parse(fs.readFileSync('./user.json', 'utf8'))
@@ -30,7 +30,7 @@ async function getCookie() {
     }
     return waitUpdateCookies
 }
-async function main() {
+module.exports = async function cronApi() {
     let users = getUsers()
     let waitUpdateCookies = await getCookie()
     for (let i of waitUpdateCookies) {
@@ -70,7 +70,3 @@ async function getJDCookies(username, password) {
 
 
 }
-// 使用cron.schedule来定时执行main函数，这里设置为每天凌晨2点执行（0 0 2 * * *），你可以根据需要修改时间表达式
-cron.schedule('0 0 3,6,9 * * *', async () => {
-    await main();
-});
