@@ -98,7 +98,7 @@ if ('cron' in config) {
 const options = {
     timezone: 'Asia/Shanghai'
 };
-cron.schedule('0 0 12 * *', taskFunction, options);
+
 cron.schedule(defuault_time, async () => {
     await cronApi();
 },options);
