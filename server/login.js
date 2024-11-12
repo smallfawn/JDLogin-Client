@@ -59,7 +59,7 @@ module.exports = async function login_pwd(object) {
         user = users_json[existingUserIndex]
         if (user['risknum'] >= 3) {
             console.log('账号' + user.username + '已失效，请重新登录 超过3次');
-            if ('risknum' in user) {
+            if ('risktime' in user) {
                 if (user['risktime'] > new Date().getTime()) {
                     return { s: 'risktime', data: user['risktime'] }
                 } else {
@@ -67,7 +67,7 @@ module.exports = async function login_pwd(object) {
                     user['risktime'] = 0
                 }
             } else {
-                user['risknum'] = 0
+                user['risktime'] = 0
             }
         }
     } else {
