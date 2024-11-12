@@ -27,6 +27,22 @@ app.get('/api/set', async (req, res) => {
         res.send({ status: 'error', msg: '用户名或密码错误' })
         return
     }
+    //
+    const users = fs.readFileSync('user.json', 'utf8')
+    let users_json = JSON.parse(users)
+    const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == username);
+    if (existingUserIndex !== -1) {
+        let user = users_json[existingUserIndex]
+        if (user['risknum'] >= 3) {
+            console.log('账号' + user.username + '已失效，请重新登录 超过3次');
+            if ('risknum' in user) {
+                if (user['risktime'] > new Date().getTime()) {
+                    return res.send({ status: 'risktime', msg: user['risktime'] })
+                }
+            }
+        }
+    }
+    //
     let { data: result } = await axios.get(config.server + '/set?key=' + config.key + '&username=' + username + '&password=' + password)
     console.log(result)
     res.send(result)

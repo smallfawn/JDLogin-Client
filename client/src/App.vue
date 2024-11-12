@@ -48,6 +48,9 @@ async function setApi() {
       await wait(1000);
       await getApi();
     }
+  } else if (res.status == 'risktime') {
+    ElMessageBox.alert('当日风控上限,请明日登录' + res.msg, '提示');
+    return;
   } else {
     ElMessageBox.alert('提交失败', '提示');
     return;

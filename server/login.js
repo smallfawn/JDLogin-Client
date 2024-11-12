@@ -1,4 +1,3 @@
-
 const axios = require('axios');
 const { update } = require('./ql.js')
 const fs = require('fs')
@@ -55,20 +54,28 @@ module.exports = async function login_pwd(object) {
     }
     const users = fs.readFileSync('user.json', 'utf8')
     let users_json = JSON.parse(users)
-    if (object.username in users_json) {
-        if (users_json[object.username]['risknum'] >= 3) {
-            if ('risknum' in users_json[object.username]) {
-                if (users_json[object.username]['risktime'] < new Date().getTime()) {
-                    return { s: 'risktime', data: users_json[object.username]['risktime'] }
+    const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
+    if (existingUserIndex !== -1) {
+        user = users_json[existingUserIndex]
+        if (user['risknum'] >= 3) {
+            console.log('账号' + user.username + '已失效，请重新登录 超过3次');
+            if ('risknum' in user) {
+                if (user['risktime'] > new Date().getTime()) {
+                    return { s: 'risktime', data: user['risktime'] }
                 } else {
-                    users_json[object.username]['risknum'] = 0
-                    users_json[object.username]['risktime'] = 0
+                    user['risknum'] = 0
+                    user['risktime'] = 0
                 }
             } else {
-                users_json[object.username]['risknum'] = 0
+                user['risknum'] = 0
             }
         }
+    } else {
+        users_json.push(user);
     }
+
+
+
 
     let res = await request(options)
     if (res.data.err_code == 0) { } else {
@@ -121,13 +128,18 @@ module.exports = async function login_pwd(object) {
         return { s: 'success', data: 'pt_pin=' + user.pt_pin + ';' }
     } else if (res.data.err_code == 128 || res.data.err_code == 142) {
         object.status = 'risk'
-        user.risknum = 1
         // 检查是否存在相同用户名的用户，若存在则更新
-        if (object.username in users_json) {
+        const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
+        if (existingUserIndex !== -1) {
+            console.log(JSON.stringify(users_json[existingUserIndex]));
+
+            user = users_json[existingUserIndex];
             console.log('存在相同用户名[风控阶段]');
 
-            user = users_json[object.username]
+
             user.risknum = Number(user.risknum) + 1
+
+
             if (user.risknum >= 3) {
                 console.log('超过3次[风控阶段]');
                 //获取今天晚上0点的时间戳
@@ -136,6 +148,7 @@ module.exports = async function login_pwd(object) {
                 let tomorrow = new Date(today);
                 tomorrow.setDate(today.getDate() + 1);
                 user.risktime = tomorrow.getTime()
+                users_json[existingUserIndex] = user;
                 fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
                 return { s: 'risktime', data: user.risktime }
             }
@@ -143,6 +156,7 @@ module.exports = async function login_pwd(object) {
             user.risknum = 1
             users_json.push(user);
         }
+
         // 将更新后的用户数据写回文件
         fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
         return { s: 'risk', data: res.data.succcb }
