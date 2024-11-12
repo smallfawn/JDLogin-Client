@@ -87,7 +87,13 @@ app.listen(port, () => {
 const cron = require('node-cron')
 const cronApi = require('./cron.js')
 // 使用cron.schedule来定时执行main函数，这里设置为每天凌晨2点执行（0 0 2 * * *），你可以根据需要修改时间表达式
-cron.schedule('0 25 20,23,2 * * *', async () => {
+let defuault_time = '0 25 20,23,2 * * *';
+if ('cron' in config) {
+    defuault_time = config.cron;
+    console.log('定时任务时间设置===>' + defuault_time);
+}
+
+cron.schedule(defuault_time, async () => {
     await cronApi();
-});
+}, options);
 
