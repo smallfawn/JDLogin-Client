@@ -91,9 +91,15 @@ let defuault_time = '0 25 20,23,2 * * *';
 if ('cron' in config) {
     defuault_time = config.cron;
     console.log('定时任务时间设置===>' + defuault_time);
+
 }
 
+
+const options = {
+    timezone: 'Asia/Shanghai'
+};
+cron.schedule('0 0 12 * *', taskFunction, options);
 cron.schedule(defuault_time, async () => {
     await cronApi();
-}, options);
+},options);
 

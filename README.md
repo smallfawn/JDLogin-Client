@@ -1,9 +1,10 @@
 ```json
 {
-    "key": "XXXXX",
+    "key": "KEY",
     "server": "http://APIURL",
-    "qlhost": "http://127.0.0.1:5700",
-    "qlappid": "XXX",
-    "qlsecret": "XXX"
+    "qlhost": "",
+    "qlappid": "",
+    "qlsecret": "",
+    "cron": "0 25 20,23,2 * * *"
 }
 ```
