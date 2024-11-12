@@ -5,3 +5,4 @@ services:
       - "你的端口:3000"
     volumes:
       - ./config.json:/app/config.json
+      - ./user.json:/app/user.json
