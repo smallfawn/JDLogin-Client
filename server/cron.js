@@ -73,6 +73,9 @@ async function getJDCookies(username, password, remark = '无备注') {
                     console.log(`更新${username}的cookie失败`)
                     //res.send({ status: s, msg: '登录失败', data: data })
                     return
+                } else if (s == 'risktime') {
+                    console.log(`更新${username}的cookie失败，限流处理`)
+                    return
                 }
             }
 
