@@ -3,7 +3,8 @@ const app = express()
 const port = 3000
 const axios = require('axios')
 const config = require('./config.json')
-
+const fs = require('fs');
+const crypto = require('crypto');
 const login = require('./login.js')
 app.use(express.static('template'));
 /*app.get('/', async (req, res) => {
