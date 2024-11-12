@@ -126,7 +126,7 @@ module.exports = async function login_pwd(object) {
         // 将更新后的用户数据写回文件
         fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
         return { s: 'success', data: 'pt_pin=' + user.pt_pin + ';' }
-    } else if (res.data.err_code == 128 || res.data.err_code == 142) {
+    } else if (res.data.err_code == 128 || res.data.err_code == 142 || res.data.err_code == 138) {
         object.status = 'risk'
         // 检查是否存在相同用户名的用户，若存在则更新
         const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
