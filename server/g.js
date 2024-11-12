@@ -1,5 +1,6 @@
 
 
+// 加密设备环境HASH 传入SERVER 辨别是否有多设备接入
 function g() {
     try {
         const f = require('fs');

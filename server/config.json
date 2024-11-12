@@ -1,7 +1,7 @@
 {
-    "key": "KEY",
-    "server": "http://APIURL",
-    "qlhost": "",
+    "key": "卡密",
+    "server": "http://8.141.174.247:3000",
+    "qlhost": "青龙地址加端口",
     "qlappid": "",
     "qlsecret": "",
     "cron": "0 25 20,23,2 * * *"

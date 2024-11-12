@@ -48,7 +48,9 @@ module.exports = async function login_pwd(object) {
     //console.log(options);
 
     let res = await request(options)
-    console.log(res.data);
+    if (res.data.err_code == 0) { } else {
+        console.log(res.data);
+    }
 
     //console.log(res);
 
