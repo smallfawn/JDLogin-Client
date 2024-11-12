@@ -67,7 +67,6 @@ module.exports = async function login_pwd(object) {
             } else {
                 users_json[object.username]['risknum'] = 0
             }
-
         }
     }
 
@@ -124,17 +123,20 @@ module.exports = async function login_pwd(object) {
         object.status = 'risk'
         user.risknum = 1
         // 检查是否存在相同用户名的用户，若存在则更新
-        const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
-        if (existingUserIndex !== -1) {
-            user = users_json[existingUserIndex]
+        if (object.username in users_json) {
+            console.log('存在相同用户名[风控阶段]');
+
+            user = users_json[object.username]
             user.risknum = Number(user.risknum) + 1
             if (user.risknum >= 3) {
+                console.log('超过3次[风控阶段]');
                 //获取今天晚上0点的时间戳
                 let today = new Date();
                 today.setHours(0, 0, 0, 0);
                 let tomorrow = new Date(today);
                 tomorrow.setDate(today.getDate() + 1);
                 user.risktime = tomorrow.getTime()
+                fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
                 return { s: 'risktime', data: user.risktime }
             }
         } else {
