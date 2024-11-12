@@ -46,6 +46,30 @@ module.exports = async function login_pwd(object) {
     }
 
     //console.log(options);
+    let user = {
+        risknum: 0,
+        risktime: 0,
+        username: object.username,
+        password: object.password,
+        pt_pin: ''
+    }
+    const users = fs.readFileSync('user.json', 'utf8')
+    let users_json = JSON.parse(users)
+    if (object.username in users_json) {
+        if (users_json[object.username]['risknum'] >= 3) {
+            if ('risknum' in users_json[object.username]) {
+                if (users_json[object.username]['risktime'] < new Date().getTime()) {
+                    return { s: 'risktime', data: users_json[object.username]['risktime'] }
+                } else {
+                    users_json[object.username]['risknum'] = 0
+                    users_json[object.username]['risktime'] = 0
+                }
+            } else {
+                users_json[object.username]['risknum'] = 0
+            }
+
+        }
+    }
 
     let res = await request(options)
     if (res.data.err_code == 0) { } else {
@@ -67,6 +91,8 @@ module.exports = async function login_pwd(object) {
             console.log("未找到token值");
         }
     }*/
+
+
     if (res.data.err_code == 0) {
         let pt_keyValue = "";
         let pt_pinValue = "";
@@ -83,15 +109,7 @@ module.exports = async function login_pwd(object) {
         const cookies = `${pt_keyValue}; ${pt_pinValue};`;
         await update(cookies, object.remark)
         //保存到user.json
-        let user = {
-            risknum: 0,
-            username: object.username,
-            password: object.password,
-            pt_pin: cookies.match(/pt_pin=(.*?);/)[1]
-        }
-
-        const users = fs.readFileSync('user.json', 'utf8')
-        let users_json = JSON.parse(users)
+        user.pt_pin = cookies.match(/pt_pin=(.*?);/)[1]
         // 检查是否存在相同用户名的用户，若存在则更新
         const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
         if (existingUserIndex !== -1) {
@@ -99,12 +117,32 @@ module.exports = async function login_pwd(object) {
         } else {
             users_json.push(user);
         }
-
         // 将更新后的用户数据写回文件
         fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
         return { s: 'success', data: 'pt_pin=' + user.pt_pin + ';' }
     } else if (res.data.err_code == 128 || res.data.err_code == 142) {
         object.status = 'risk'
+        user.risknum = 1
+        // 检查是否存在相同用户名的用户，若存在则更新
+        const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
+        if (existingUserIndex !== -1) {
+            user = users_json[existingUserIndex]
+            user.risknum = Number(user.risknum) + 1
+            if (user.risknum >= 3) {
+                //获取今天晚上0点的时间戳
+                let today = new Date();
+                today.setHours(0, 0, 0, 0);
+                let tomorrow = new Date(today);
+                tomorrow.setDate(today.getDate() + 1);
+                user.risktime = tomorrow.getTime()
+                return { s: 'risktime', data: user.risktime }
+            }
+        } else {
+            user.risknum = 1
+            users_json.push(user);
+        }
+        // 将更新后的用户数据写回文件
+        fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
         return { s: 'risk', data: res.data.succcb }
     } else {
         return { s: 'error', data: res.data.err_msg }

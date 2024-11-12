@@ -66,6 +66,11 @@ async function getApi() {
       });
     return;
   }
+  if (res.status == 'risktime') {
+    ElMessageBox.alert('账号登录失败', '提示');
+    isLooping = false;
+    return;
+  }
   if (res.status == 'success') {
     ElMessageBox.alert('账号登录成功', '提示');
     isLooping = false;

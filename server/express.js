@@ -52,8 +52,11 @@ app.get('/api/get', async (req, res) => {
         } else if (s == 'risk') {
             //如果存在user.json里面有这个user
             //这里给user.json 里面的risknum + 1
-
             res.send({ status: 'risk', msg: '登录风控', data: data })
+            return
+        } else if (s == 'risktime') {
+            //if(Date.now() > data){}
+            res.send({ status: 'risktime', msg: '登录风控今日上限,请于明日再来登录', data: data })
             return
         } else {
             res.send({ status: s, msg: '登录失败', data: data })
