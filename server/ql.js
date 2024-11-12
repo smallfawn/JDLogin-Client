@@ -259,7 +259,7 @@ class QingLong {
 
 
 module.exports = { update, QingLong }
-async function update(updateCookie) {
+async function update(updateCookie, remark = '') {
     const config = require('./config.json');
     let ql = new QingLong(config.qlhost, config.qlappid, config.qlsecret);
     await ql.getAuthToken()
@@ -270,7 +270,7 @@ async function update(updateCookie) {
                 await ql.updateEnv({
                     name: ql.envs[i].name,
                     value: updateCookie,
-                    remarks: ql.envs[i].remarks,
+                    remarks: remark,
                     id: ql.envs[i].id
                 })
                 if (ql.envs[i].status !== 0) {
@@ -294,7 +294,7 @@ async function update(updateCookie) {
     }
 
     if (!found) {
-        ql.addEnv([{ value: updateCookie, name: 'JD_COOKIE', remarks: '备注' }])
+        ql.addEnv([{ value: updateCookie, name: 'JD_COOKIE', remarks: remark }])
     }
 
 }

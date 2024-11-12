@@ -31,7 +31,7 @@ app.get('/api/set', async (req, res) => {
     res.send(result)
 })
 app.get('/api/get', async (req, res) => {
-    const { username } = req.query
+    const { username, remark } = req.query
     if (!username) {
         res.send({ status: 'error', msg: '参数错误' })
         return
@@ -39,10 +39,14 @@ app.get('/api/get', async (req, res) => {
     let { data: result } = await axios.get(config.server + '/get?key=' + config.key + '&username=' + username)
     if (result.status === 'success') {
         let object = result.data
-
+        if (remark) {
+            Object.assign(object, { remark })
+        } else {
+            Object.assign(object, { remark: '无备注' })
+        }
         let { s, data } = await login(object)
         if (s == 'success') {
-            res.send({ status: 'success', msg: '登录成功', data: '' })
+            res.send({ status: 'success', msg: '登录成功', data: data })
             return
         } else if (s == 'risk') {
             //如果存在user.json里面有这个user
@@ -101,5 +105,5 @@ const options = {
 
 cron.schedule(defuault_time, async () => {
     await cronApi();
-},options);
+}, options);
 

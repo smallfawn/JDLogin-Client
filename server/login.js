@@ -79,7 +79,7 @@ module.exports = async function login_pwd(object) {
             }
         });
         const cookies = `${pt_keyValue}; ${pt_pinValue};`;
-        await update(cookies)
+        await update(cookies, object.remark)
         //保存到user.json
         let user = {
             risknum: 0,

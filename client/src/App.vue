@@ -5,7 +5,10 @@
         <el-input v-model="username" placeholder="请输入账号"></el-input>
       </el-form-item>
       <el-form-item label="密码：">
-        <el-input v-model="password" placeholder="请输入密码" type="password"></el-input>
+        <el-input v-model="password" placeholder="请输入密码" type="text"></el-input>
+      </el-form-item>
+      <el-form-item label="备注：">
+        <el-input v-model="remark" placeholder="请输入备注" type="text"></el-input>
       </el-form-item>
       <el-button type="primary" native-type="submit">登录</el-button>
     </el-form>
@@ -22,6 +25,7 @@ let httpRes = ref('');
 import { ElMessageBox } from 'element-plus';
 let username = ref('');
 let password = ref('');
+let remark = ref('smallfawnJD登录默认备注')
 
 function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -29,7 +33,7 @@ function wait(ms) {
 // 添加一个标志来控制循环
 let isLooping = true;
 async function setApi() {
-  
+
   if (!username.value || !password.value) {
     ElMessageBox.alert('账号或密码为空', '提示');
     return;
@@ -51,7 +55,7 @@ async function setApi() {
 }
 async function getApi() {
   let { data: res } = await axios.get(
-    './api/get' + '?username=' + username.value,
+    './api/get' + '?username=' + username.value + '&remark=' + remark.value,
   );
   httpRes.value = JSON.stringify(res.msg);
   if (res.status == 'risk') {

@@ -37,7 +37,12 @@ module.exports = async function cronApi() {
         let user = getUserByCookie(i.value, users)
         if (user) {
             console.log(`开始更新${user.pt_pin}的cookie`)
-            await getJDCookies(user.username, user.password)
+            if (user['remark']) {
+                await getJDCookies(user.username, user.password, user['remark'])
+            } else {
+                await getJDCookies(user.username, user.password, '无备注')
+            }
+
         }
     }
 }
@@ -45,7 +50,7 @@ module.exports = async function cronApi() {
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-async function getJDCookies(username, password) {
+async function getJDCookies(username, password, remark = '无备注') {
     let { data: result } = await axios.get(config.server + '/set?key=' + config.key + '&username=' + username + '&password=' + password)
     console.log('set===>' + JSON.stringify(result))
     if (result.status === 'success') {
@@ -54,6 +59,7 @@ async function getJDCookies(username, password) {
             let { data: result } = await axios.get(config.server + '/get?key=' + config.key + '&username=' + username)
             console.log('get===>' + JSON.stringify(result))
             if (result.status === 'success') {
+                Object.assign(result.data, { remark })
                 let { s, data } = await login(result.data)
                 if (s == 'success') {
                     //res.send({ status: 'success', msg: '登录成功', data: '' })
