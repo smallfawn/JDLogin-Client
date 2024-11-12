@@ -270,6 +270,9 @@ async function update(updateCookie, remark = '') {
                 if (ql.envs[i].remarks.indexOf('@@') != -1) {
                     remark = ql.envs[i].remarks
                 }
+                if (remark == '') {
+                    remark = updateCookie.match(/pt_pin=([^;]+);/)[1]
+                }
                 await ql.updateEnv({
                     name: ql.envs[i].name,
                     value: updateCookie,

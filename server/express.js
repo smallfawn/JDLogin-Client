@@ -43,7 +43,7 @@ app.get('/api/get', async (req, res) => {
         if (remark) {
             Object.assign(object, { remark })
         } else {
-            Object.assign(object, { remark: '无备注' })
+            Object.assign(object, { remark: '' })
         }
         let { s, data } = await login(object)
         if (s == 'success') {

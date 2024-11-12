@@ -25,7 +25,7 @@ let httpRes = ref('');
 import { ElMessageBox } from 'element-plus';
 let username = ref('');
 let password = ref('');
-let remark = ref('smallfawnJD登录默认备注')
+let remark = ref('')
 
 function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
