@@ -35,11 +35,13 @@ app.get('/api/set', async (req, res) => {
         let user = users_json[existingUserIndex]
         if (user['risknum'] >= 3) {
             console.log('账号' + user.username + '已失效，请重新登录 超过3次');
-            if ('risknum' in user) {
+            if ('risktime' in user) {
                 if (user['risktime'] > new Date().getTime()) {
                     return res.send({ status: 'risktime', msg: user['risktime'] })
                 }
             }
+
+
         }
     }
     //
