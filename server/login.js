@@ -1,12 +1,18 @@
 const axios = require('axios');
 const { update } = require('./ql.js')
 const fs = require('fs')
+const { enen } = require('./en.js')
 async function request(options) {
 
     let result = await axios.request(options);
     return result;
 }
 module.exports = async function login_pwd(object) {
+    let phone = enen(object.username, object.rsa_module)
+    let pwd = enen(object.password, object.rsa_module)
+    Object.assign(object, { phone })
+    Object.assign(object, { pwd })
+
     let options = {
         url: "https://plogin.m.jd.com/cgi-bin/mm/domlogin",
         method: "POST",

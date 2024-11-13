@@ -4,7 +4,6 @@ const port = 3000
 const axios = require('axios')
 const config = require('./config.json')
 const fs = require('fs');
-const crypto = require('crypto');
 const login = require('./login.js')
 app.use(express.static('template'));
 /*app.get('/', async (req, res) => {
@@ -18,7 +17,7 @@ app.use(express.static('template'));
 
 });*/
 app.get('/api/set', async (req, res) => {
-    const { username, password } = req.query
+    const { username } = req.query
     if (!(username && password)) {
         res.send({ status: 'error', msg: '参数错误' })
         return
@@ -41,23 +40,25 @@ app.get('/api/set', async (req, res) => {
                 }
             }
 
-
         }
     }
     //
-    let { data: result } = await axios.get(config.server + '/set?key=' + config.key + '&username=' + username + '&password=' + password)
-    console.log(result)
+    let { data: result } = await axios.get(config.server + '/set?key=' + config.key + '&username=' + username)
+    //console.log(result)
     res.send(result)
 })
 app.get('/api/get', async (req, res) => {
-    const { username, remark } = req.query
-    if (!username) {
+    const { username, remark, password } = req.query
+    if (!username || !password) {
         res.send({ status: 'error', msg: '参数错误' })
         return
     }
+
     let { data: result } = await axios.get(config.server + '/get?key=' + config.key + '&username=' + username)
     if (result.status === 'success') {
         let object = result.data
+        Object.assign(object, { username })
+        Object.assign(object, { password })
         if (remark) {
             Object.assign(object, { remark })
         } else {
