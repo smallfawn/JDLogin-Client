@@ -5,7 +5,7 @@
  * @version 1.0.0
  * @description 鹿飞账密登录
  * @rule ^(鹿登|路灯)
- * @admin true
+ * @admin false
  * @public false
  * @priority 1
  * @disable false
@@ -31,6 +31,7 @@ module.exports = async s => {
                 let password_input = await s.waitInput(async (s) => {
 
                     let password = s.getMsg();
+                    await s.reply('正在登陆中ing');
                     for (let i = 0; i <= 15; i++) {
                         await wait(1000)
                         let { data: res } = await axios.get(YourSMJDAPIUrl + '/api/get?username=' + username + '&password=' + password + '&remark=')
