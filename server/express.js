@@ -18,7 +18,7 @@ app.use(express.static('template'));
 });*/
 app.get('/api/set', async (req, res) => {
     const { username } = req.query
-    if (!(username && password)) {
+    if (!(username)) {
         res.send({ status: 'error', msg: '参数错误' })
         return
     }
