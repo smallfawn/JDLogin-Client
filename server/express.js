@@ -6,16 +6,7 @@ const config = require('./config.json')
 const fs = require('fs');
 const login = require('./login.js')
 app.use(express.static('template'));
-/*app.get('/', async (req, res) => {
-    let { data: result } = await axios.get(config.server + '/auth?key=' + config.key)
-    if (result.status === 'success') {
-        res.sendFile(__dirname + '/template/');
-    } else[
-        res.send('许可证已过期/失效，请联系管理员')
-    ]
 
-
-});*/
 app.get('/api/set', async (req, res) => {
     const { username } = req.query
     if (!(username)) {
@@ -107,7 +98,6 @@ app.listen(port, () => {
     var hours = currentDate.getHours();
     var minutes = currentDate.getMinutes();
     var seconds = currentDate.getSeconds();
-
     console.log('系统时间===>' + year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds);
 
 })
@@ -118,7 +108,6 @@ let defuault_time = '0 25 20,23,2 * * *';
 if ('cron' in config) {
     defuault_time = config.cron;
     console.log('定时任务时间设置===>' + defuault_time);
-
 }
 
 
