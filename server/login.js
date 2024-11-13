@@ -57,8 +57,8 @@ module.exports = async function login_pwd(object) {
     const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
     if (existingUserIndex !== -1) {
         user = users_json[existingUserIndex]
-        if (user['risknum'] >= 3) {
-            console.log('账号' + user.username + '已失效，请重新登录 超过3次');
+        if (user['risknum'] >= 2) {
+            console.log('账号' + user.username + '已失效，请重新登录 超过2次');
             if ('risktime' in user) {
                 if (user['risktime'] > new Date().getTime()) {
                     return { s: 'risktime', data: user['risktime'] }
@@ -140,8 +140,8 @@ module.exports = async function login_pwd(object) {
             user.risknum = Number(user.risknum) + 1
 
 
-            if (user.risknum >= 3) {
-                console.log('超过3次[风控阶段]');
+            if (user.risknum >= 2) {
+                console.log('超过2次[风控阶段]');
                 //获取今天晚上0点的时间戳
                 let today = new Date();
                 today.setHours(0, 0, 0, 0);
