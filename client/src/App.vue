@@ -40,7 +40,7 @@ async function setApi() {
   }
   isLooping = true;
   let { data: res } = await axios.get(
-    './api/set' + '?username=' + username.value + '&password=' + password.value,
+    './api/set' + '?username=' + username.value,
   );
   if (res.status == 'success') {
     ElMessageBox.alert('提交成功', '提示');
@@ -58,7 +58,7 @@ async function setApi() {
 }
 async function getApi() {
   let { data: res } = await axios.get(
-    './api/get' + '?username=' + username.value + '&remark=' + remark.value,
+    './api/get' + '?username=' + username.value + '&remark=' + remark.value + '&password=' + password.value,
   );
   httpRes.value = JSON.stringify(res.msg);
   if (res.status == 'risk') {
