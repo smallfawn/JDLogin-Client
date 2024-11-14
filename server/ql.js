@@ -267,7 +267,7 @@ async function update(updateCookie, remark = '') {
     for (let i = 0; i < ql.envs.length; i++) {
         if (ql.envs[i].name == 'JD_COOKIE' && ql.envs[i].value.match(/pt_pin=([^;]+);/)) {
             if (ql.envs[i].value.match(/pt_pin=([^;]+);/)[1] == updateCookie.match(/pt_pin=([^;]+);/)[1]) {
-                if (ql.envs[i].remarks.indexOf('@@') != -1) {
+                if (ql.envs[i].remarks && ql.envs[i].remarks.indexOf('@@') != -1) {
                     remark = ql.envs[i].remarks
                 }
                 if (remark == '') {
