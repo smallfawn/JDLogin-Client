@@ -8,11 +8,12 @@ const login = require('./login.js')
 app.use(express.static('template'));
 
 app.get('/api/set', async (req, res) => {
-    const { username } = req.query
+    let { username } = req.query
     if (!(username)) {
         res.send({ status: 'error', msg: '参数错误' })
         return
     }
+    username = decodeURIComponent(username)
     if (username === 'admin' || username == '123' || username == '12345' || username == '123456' || username.length < 3) {
         res.send({ status: 'error', msg: '用户名或密码错误' })
         return
@@ -39,7 +40,7 @@ app.get('/api/set', async (req, res) => {
     res.send(result)
 })
 app.get('/api/get', async (req, res) => {
-    const { username, remark, password } = req.query
+    let { username, remark, password } = req.query
     if (!username || !password) {
         res.send({ status: 'error', msg: '参数错误' })
         return
@@ -48,6 +49,9 @@ app.get('/api/get', async (req, res) => {
     let { data: result } = await axios.get(config.server + '/get?key=' + config.key + '&username=' + username)
     if (result.status === 'success') {
         let object = result.data
+        username = decodeURIComponent(username)
+        password = decodeURIComponent(password)
+        remark = decodeURIComponent(remark)
         Object.assign(object, { username })
         Object.assign(object, { password })
         if (remark) {
