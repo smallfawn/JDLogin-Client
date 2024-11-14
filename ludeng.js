@@ -35,6 +35,7 @@ module.exports = async s => {
                     for (let i = 0; i <= 15; i++) {
                         await wait(1000)
                         let { data: res } = await axios.get(YourSMJDAPIUrl + '/api/get?username=' + username + '&password=' + password + '&remark=')
+                        //console.log(res)
                         if (res.status == 'success') {
                             await s.reply('登录成功')
                             return
@@ -43,6 +44,7 @@ module.exports = async s => {
                             await s.reply('登录风控,进链接过验证再来重新登录吧' + res.data)
                             return
                         }
+
                         if (res.status == 'risktime') {
                             await s.reply('登录风控超过次数限制明天再来吧')
                             return
@@ -58,6 +60,12 @@ module.exports = async s => {
                 }, 30);
                 if (password_input === null) return s.reply('超时退出');
                 if (password_input.getMsg() === 'q') return s.reply('已退出');
+            } else if (res.status == 'risktime') {
+                await s.reply('账号报错: ' + '每日风控超2次 禁止提交')
+                return
+            } else {
+                await s.reply('账号报错: ' + res.msg)
+                return
             }
 
 
