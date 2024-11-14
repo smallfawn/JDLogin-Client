@@ -12,7 +12,7 @@ module.exports = async function login_pwd(object) {
     let pwd = enen(object.password, object.rsa_module)
     Object.assign(object, { phone })
     Object.assign(object, { pwd })
-
+    //console.log(object)
     let options = {
         url: "https://plogin.m.jd.com/cgi-bin/mm/domlogin",
         method: "POST",

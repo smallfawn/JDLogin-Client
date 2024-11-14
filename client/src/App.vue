@@ -44,9 +44,9 @@ async function setApi() {
   );
   if (res.status == 'success') {
     ElMessageBox.alert('提交成功', '提示');
-    for (let i = 0; i < 15 && isLooping; i++) {
+    for (let i = 0; i < 20 && isLooping; i++) {
       await wait(1000);
-      await getApi();
+      await getApi(i);
     }
   } else if (res.status == 'risktime') {
     ElMessageBox.alert('当日风控上限,请明日登录' + res.msg, '提示');
@@ -56,11 +56,11 @@ async function setApi() {
     return;
   }
 }
-async function getApi() {
+async function getApi(i) {
   let { data: res } = await axios.get(
     './api/get' + '?username=' + username.value + '&remark=' + remark.value + '&password=' + password.value,
   );
-  httpRes.value = JSON.stringify(res.msg);
+  httpRes.value = '正在进行第' + i + '次请求状态' + res.msg
   if (res.status == 'risk') {
     isLooping = false;
     ElMessageBox.confirm('账号存在风险，请进入链接进行验证,验证通过后再次提交即可', '警告')
