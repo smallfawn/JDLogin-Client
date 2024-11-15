@@ -23,7 +23,7 @@ module.exports = async s => {
         let input;
         let username_input = await s.waitInput(async (s) => {
             input = s.getMsg();
-            if (input === 'q') return
+            if (input === 'q') return await s.reply('已退出')
             let username = s.getMsg();
 
             let { data: res } = await axios.get(YourSMJDAPIUrl + '/api/set?username=' + username)
@@ -32,7 +32,7 @@ module.exports = async s => {
                 await s.reply('请输入京东密码 输入q随时退出');
                 let password_input = await s.waitInput(async (s) => {
                     input = s.getMsg();
-                    if (input === 'q') return
+                    if (input === 'q') return await s.reply('已退出')
                     let password = s.getMsg();
                     await s.reply('正在登陆中ing');
                     for (let i = 0; i <= 15; i++) {
@@ -73,7 +73,7 @@ module.exports = async s => {
 
 
         }, 30);
-        if (username_input === null) return s.reply('超时退出/已退出');
+        if (username_input === null) return await s.reply('已退出')
 
         //撤回用户发的信息
 
