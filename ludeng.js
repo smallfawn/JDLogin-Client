@@ -20,8 +20,10 @@ module.exports = async s => {
     }
     if (s.getMsg() == '路灯') {
         await s.reply('请输入京东账号[手机号/用户名] 输入q随时退出');
+        let input;
         let username_input = await s.waitInput(async (s) => {
-            if (username_input.getMsg() === 'q') return s.reply('已退出');
+            input = s.getMsg();
+            if (input === 'q') return
             let username = s.getMsg();
 
             let { data: res } = await axios.get(YourSMJDAPIUrl + '/api/set?username=' + username)
@@ -29,7 +31,8 @@ module.exports = async s => {
             if (res.status == 'success') {
                 await s.reply('请输入京东密码 输入q随时退出');
                 let password_input = await s.waitInput(async (s) => {
-
+                    input = s.getMsg();
+                    if (input === 'q') return
                     let password = s.getMsg();
                     await s.reply('正在登陆中ing');
                     for (let i = 0; i <= 15; i++) {
@@ -58,8 +61,8 @@ module.exports = async s => {
 
 
                 }, 30);
-                if (password_input === null) return s.reply('超时退出');
-                if (password_input.getMsg() === 'q') return s.reply('已退出');
+                if (password_input === null) return s.reply('超时退出/已退出');
+
             } else if (res.status == 'risktime') {
                 await s.reply('账号报错: ' + '每日风控超2次 禁止提交')
                 return
@@ -70,7 +73,7 @@ module.exports = async s => {
 
 
         }, 30);
-        if (username_input === null) return s.reply('超时退出');
+        if (username_input === null) return s.reply('超时退出/已退出');
 
         //撤回用户发的信息
 
