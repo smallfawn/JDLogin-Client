@@ -60,6 +60,8 @@ async function getJDCookies(username, password, remark = '无备注') {
             console.log('get===>' + JSON.stringify(result))
             if (result.status === 'success') {
                 Object.assign(result.data, { remark })
+                Object.assign(result.data, { password })
+                Object.assign(result.data, { username })
                 let { s, data } = await login(result.data)
                 if (s == 'success') {
                     //res.send({ status: 'success', msg: '登录成功', data: '' })
