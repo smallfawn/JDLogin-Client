@@ -26,7 +26,10 @@ import { ElMessageBox } from 'element-plus';
 let username = ref('');
 let password = ref('');
 let remark = ref('')
-
+import CryptoJS from 'crypto-js';
+function base64Encode(str) {
+  return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(str));
+}
 function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
