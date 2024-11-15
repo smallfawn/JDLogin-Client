@@ -63,8 +63,8 @@ module.exports = async function login_pwd(object) {
     const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
     if (existingUserIndex !== -1) {
         user = users_json[existingUserIndex]
-        if (user['risknum'] >= 2) {
-            console.log('账号' + user.username + '已失效，请重新登录 超过2次');
+        if (user['risknum'] >= 3) {
+            console.log('账号' + user.username + '已失效，请重新登录 超过3次');
             if ('risktime' in user) {
                 if (user['risktime'] > new Date().getTime()) {
                     return { s: 'risktime', data: user['risktime'] }
@@ -132,7 +132,7 @@ module.exports = async function login_pwd(object) {
         // 将更新后的用户数据写回文件
         fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
         return { s: 'success', data: 'pt_pin=' + user.pt_pin + ';' }
-    } else if (res.data.err_code == 128 || res.data.err_code == 142 || res.data.err_code == 138) {
+    } else if (res.data.err_code == 128 || res.data.err_code == 142 || res.data.err_code == 138 || res.data.err_code == 6 || res.data.err_code == 7) {
         object.status = 'risk'
         // 检查是否存在相同用户名的用户，若存在则更新
         const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
@@ -146,8 +146,8 @@ module.exports = async function login_pwd(object) {
             user.risknum = Number(user.risknum) + 1
 
 
-            if (user.risknum >= 2) {
-                console.log('超过2次[风控阶段]');
+            if (user.risknum >= 3) {
+                console.log('超过3次[风控阶段]');
                 //获取今天晚上0点的时间戳
                 let today = new Date();
                 today.setHours(0, 0, 0, 0);
@@ -165,7 +165,12 @@ module.exports = async function login_pwd(object) {
 
         // 将更新后的用户数据写回文件
         fs.writeFileSync('user.json', JSON.stringify(users_json, null, 2));
-        return { s: 'risk', data: res.data.succcb }
+        if (res.data.err_code == 6 || res.data.err_code == 7) {
+            return { s: 'fail', data: `账号密码错误 试错机会 -1` }
+        } else {
+            return { s: 'risk', data: res.data.succcb }
+        }
+
     } else {
         return { s: 'error', data: res.data.err_msg }
     }

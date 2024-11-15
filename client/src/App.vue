@@ -63,7 +63,15 @@ async function getApi(i) {
   httpRes.value = '正在进行第' + i + '次请求状态' + res.msg
   if (res.status == 'risk') {
     isLooping = false;
-    ElMessageBox.confirm('账号存在风险，请进入链接进行验证,验证通过后再次提交即可', '警告')
+    ElMessageBox.confirm('账号存在风险，请点击确认进入链接进行验证,验证通过后再次提交即可', '警告')
+      .then(() => {
+        window.open(res.data);
+      });
+    return;
+  }
+  if (res.status == 'fail') {
+    isLooping = false;
+    ElMessageBox.confirm('账号或密码错误 请点击确认进入官网进行密码登录确认自己账号密码是否正确', '警告')
       .then(() => {
         window.open(res.data);
       });

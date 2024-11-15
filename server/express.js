@@ -24,8 +24,8 @@ app.get('/api/set', async (req, res) => {
     const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == username);
     if (existingUserIndex !== -1) {
         let user = users_json[existingUserIndex]
-        if (user['risknum'] >= 2) {
-            console.log('账号' + user.username + '已失效，请重新登录 超过2次');
+        if (user['risknum'] >= 3) {
+            console.log('账号' + user.username + '已失效，请重新登录 超过3次');
             if ('risktime' in user) {
                 if (user['risktime'] > new Date().getTime()) {
                     return res.send({ status: 'risktime', msg: user['risktime'] })
@@ -72,9 +72,11 @@ app.get('/api/get', async (req, res) => {
             //if(Date.now() > data){}
             res.send({ status: 'risktime', msg: '登录风控今日上限,请于明日再来登录', data: data })
             return
-        } else {
-            res.send({ status: s, msg: '登录失败', data: data })
+        } else if (s == 'fail') {
+            res.send({ status: 'fail', msg: '账号或密码错误', data: `https://m.jd.com` })
             return
+        } else {
+            res.send({ status: 'error', msg: '登录失败', data: data })
         }
     } else {
         res.send({ status: 'wait', msg: '正在登录中', data: username })
