@@ -26,7 +26,7 @@ module.exports = async s => {
             if (input === 'q') return await s.reply('已退出')
             let username = s.getMsg();
 
-            let { data: res } = await axios.get(YourSMJDAPIUrl + '/api/set?username=' + username)
+            let { data: res } = await axios.get(YourSMJDAPIUrl + '/api/set?username=' + encodeURIComponent(username))
 
             if (res.status == 'success') {
                 await s.reply('请输入京东密码 输入q随时退出');
@@ -37,7 +37,7 @@ module.exports = async s => {
                     await s.reply('正在登陆中ing');
                     for (let i = 0; i <= 15; i++) {
                         await wait(1000)
-                        let { data: res } = await axios.get(YourSMJDAPIUrl + '/api/get?username=' + username + '&password=' + password + '&remark=')
+                        let { data: res } = await axios.get(YourSMJDAPIUrl + '/api/get?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password) + '&remark=')
                         //console.log(res)
                         if (res.status == 'success') {
                             await s.reply('登录成功')
