@@ -21,7 +21,7 @@ module.exports = async s => {
     if (s.getMsg() == '路灯') {
         await s.reply('请输入京东账号[手机号/用户名] 输入q随时退出');
         let username_input = await s.waitInput(async (s) => {
-
+            if (username_input.getMsg() === 'q') return s.reply('已退出');
             let username = s.getMsg();
 
             let { data: res } = await axios.get(YourSMJDAPIUrl + '/api/set?username=' + username)
@@ -71,7 +71,7 @@ module.exports = async s => {
 
         }, 30);
         if (username_input === null) return s.reply('超时退出');
-        if (username_input.getMsg() === 'q') return s.reply('已退出');
+
         //撤回用户发的信息
 
     }
