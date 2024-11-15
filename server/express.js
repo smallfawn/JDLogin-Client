@@ -13,7 +13,10 @@ app.get('/api/set', async (req, res) => {
         res.send({ status: 'error', msg: '参数错误' })
         return
     }
-    username = decodeURIComponent(username)
+    try {
+        username = decodeURIComponent(username)
+    } catch (error) { }
+
     if (username === 'admin' || username == '123' || username == '12345' || username == '123456' || username.length < 3) {
         res.send({ status: 'error', msg: '用户名或密码错误' })
         return
@@ -49,9 +52,14 @@ app.get('/api/get', async (req, res) => {
     let { data: result } = await axios.get(config.server + '/get?key=' + config.key + '&username=' + username)
     if (result.status === 'success') {
         let object = result.data
-        username = decodeURIComponent(username)
-        password = decodeURIComponent(password)
-        remark = decodeURIComponent(remark)
+        try {
+            username = decodeURIComponent(username)
+            password = decodeURIComponent(password)
+            remark = decodeURIComponent(remark)
+        } catch (error) {
+
+        }
+
         Object.assign(object, { username })
         Object.assign(object, { password })
         if (remark) {
