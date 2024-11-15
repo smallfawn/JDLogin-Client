@@ -47,7 +47,10 @@ module.exports = async s => {
                             await s.reply('登录风控,进链接过验证再来重新登录吧' + res.data)
                             return
                         }
-
+                        if (res.status == 'fail') {
+                            await s.reply('密码/账号错误 请先去' + res.data +'登录一遍（账密登录）')
+                            return
+                        }
                         if (res.status == 'risktime') {
                             await s.reply('登录风控超过次数限制明天再来吧')
                             return
