@@ -48,7 +48,7 @@ module.exports = async s => {
                             return
                         }
                         if (res.status == 'fail') {
-                            await s.reply('密码/账号错误 请先去' + res.data +'登录一遍（账密登录）')
+                            await s.reply('密码/账号错误 请先去' + res.data + '登录一遍（账密登录）')
                             return
                         }
                         if (res.status == 'risktime') {
