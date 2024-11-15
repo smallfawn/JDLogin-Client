@@ -118,10 +118,18 @@ module.exports = async function login_pwd(object) {
                 pt_pinValue = `pt_pin=${pt_pinMatch[1]}`;
             }
         });
+        try {
+            pt_pinValue = decodeURIComponent(pt_pinValue)
+        } catch (e) {
+        }
         const cookies = `${pt_keyValue}; ${pt_pinValue};`;
         await update(cookies, object.remark)
         //保存到user.json
         user.pt_pin = cookies.match(/pt_pin=(.*?);/)[1]
+        try {
+            user.pt_pin = decodeURIComponent(user.pt_pin)
+        } catch (e) {
+        }
         // 检查是否存在相同用户名的用户，若存在则更新
         const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
         if (existingUserIndex !== -1) {
@@ -137,10 +145,10 @@ module.exports = async function login_pwd(object) {
         // 检查是否存在相同用户名的用户，若存在则更新
         const existingUserIndex = users_json.findIndex(existingUser => existingUser.username == user.username);
         if (existingUserIndex !== -1) {
-            console.log(JSON.stringify(users_json[existingUserIndex]));
+            //console.log(JSON.stringify(users_json[existingUserIndex]));
 
             user = users_json[existingUserIndex];
-            console.log('存在相同用户名[风控阶段]');
+            //console.log('存在相同用户名[风控阶段]');
 
 
             user.risknum = Number(user.risknum) + 1
